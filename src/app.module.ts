@@ -2,15 +2,18 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PagesController } from './pages/pages.controller';
-import { PagesService } from './pages/pages.service';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { PagesModule } from './pages/pages.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import config from './config/keys';
-
-const mongoURI: string = `mongodb://${config.mongoDBUsername}:${config.mongoDBPassword}@${config.mongoURI}/${config.mongoDBName}`;
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { Connection } from 'typeorm';
 
 @Module({
-  imports: [PagesModule, MongooseModule.forRoot(mongoURI)],
+  imports: [PagesModule, TypeOrmModule.forRoot({
+    type: 'sqlite',
+    database: 'db',
+    entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    synchronize: true,
+  })],
   controllers: [AppController, PagesController],
   providers: [AppService],
 })

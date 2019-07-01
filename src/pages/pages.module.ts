@@ -1,19 +1,12 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { PageSchema } from './schemas/page.schema';
 import { PagesController } from './pages.controller';
 import { PagesService } from './pages.service';
+import { Page } from './page.entity';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      {
-        name: 'Page',
-        schema: PageSchema,
-      },
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([Page])],
   controllers: [PagesController],
   providers: [PagesService],
   exports: [PagesService],

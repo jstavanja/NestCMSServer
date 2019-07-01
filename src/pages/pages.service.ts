@@ -1,31 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { Page } from './interfaces/page.interface';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, DeleteResult, UpdateResult } from 'typeorm';
+import { Page } from './page.entity';
+import { CreatePageDto } from './dto/create-page.dto';
+
 
 @Injectable()
 export class PagesService {
 
-    constructor(@InjectModel('Page') private readonly pageModel: Model<Page>) {}
+    constructor(@InjectRepository(Page) private readonly pageRepository: Repository<Page>) {}
 
     async findAll(): Promise<Page[]> {
-        return await this.pageModel.find();
+        return await this.pageRepository.find();
     }
 
     async findOne(id: string): Promise<Page> {
-        return await this.pageModel.findOne({ _id: id });
+        return await this.pageRepository.findOne(id);
     }
 
-    async create(page: Page): Promise<Page> {
-        const newPage = new this.pageModel(page);
-        return await newPage.save();
+    async create(createPageDto: CreatePageDto): Promise<Page> {
+        const page = this.pageRepository.create(createPageDto);
+        return await this.pageRepository.save(page);
     }
 
-    async delete(id: string): Promise<Page> {
-        return await this.pageModel.findByIdAndRemove(id);
+    async delete(id: string): Promise<DeleteResult> {
+        return await this.pageRepository.delete(id);
     }
 
-    async update(id: string, page: Page): Promise<Page> {
-        return await this.pageModel.findByIdAndUpdate(id, page, { new: true });
+    async update(id: string, updatePageDto: CreatePageDto): Promise<UpdateResult> {
+        return await this.pageRepository.update(id, updatePageDto);
     }
 }
