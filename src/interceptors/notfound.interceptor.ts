@@ -1,6 +1,6 @@
-import { Injectable, NestInterceptor, ExecutionContext, BadGatewayException, CallHandler, NotFoundException } from '@nestjs/common';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler, NotFoundException } from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class NotFoundInterceptor implements NestInterceptor {
