@@ -6,17 +6,16 @@ import { Page } from './page.entity';
 import { Repository } from 'typeorm';
 import { CreatePageDto } from './dto/create-page.dto';
 
-
 describe('Pages Service', () => {
 
   let service: PagesService;
   let repository: Repository<Page>;
 
   const mockPage: CreatePageDto = {
-    'title': 'Page 1',
-    'permalink': 'page-1',
-    'content': 'Test content for page 1.',
-    'isPublished': true,
+    title: 'Page 1',
+    permalink: 'page-1',
+    content: 'Test content for page 1.',
+    isPublished: true,
   };
 
   beforeEach(async () => {
@@ -33,7 +32,7 @@ describe('Pages Service', () => {
             delete: jest.fn(() => true),
             update: jest.fn(() => true),
           }),
-        }
+        },
       ],
     }).compile();
 
@@ -64,7 +63,7 @@ describe('Pages Service', () => {
     await service.delete('test-id');
     expect(repository.delete).toHaveBeenCalledWith('test-id');
   });
-  
+
   it('should update a page', async () => {
     await service.update('test-id', mockPage);
     expect(repository.update).toHaveBeenCalledWith('test-id', mockPage);

@@ -5,15 +5,15 @@ import { PagesService } from './pages.service';
 import { CreatePageDto } from './dto/create-page.dto';
 
 describe('Pages Controller', () => {
-  
+
   let controller: PagesController;
   let service: PagesService;
 
   const mockPage: CreatePageDto = {
-    'title': 'Page 1',
-    'permalink': 'page-1',
-    'content': 'Test content for page 1.',
-    'isPublished': true,
+    title: 'Page 1',
+    permalink: 'page-1',
+    content: 'Test content for page 1.',
+    isPublished: true,
   };
 
   beforeEach(async () => {
@@ -29,8 +29,8 @@ describe('Pages Controller', () => {
             delete: jest.fn(() => true),
             update: jest.fn(() => true),
           }),
-        }
-      ]
+        },
+      ],
     }).compile();
 
     controller = module.get<PagesController>(PagesController);

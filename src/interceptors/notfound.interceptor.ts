@@ -8,7 +8,7 @@ export class NotFoundInterceptor implements NestInterceptor {
     return next
       .handle()
       .pipe(map(data => {
-        if (data === undefined) throw new NotFoundException();
+        if (data === undefined) { throw new NotFoundException(); }
         return data;
       }));
   }

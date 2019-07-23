@@ -12,7 +12,7 @@ export class User {
 
     @Column({
         type: 'text',
-        unique: true
+        unique: true,
     })
     username: string;
 
@@ -40,7 +40,7 @@ export class User {
     private get token() {
         const  { id, username } = this;
         return jwt.sign({
-            id, username
+            id, username,
         }, process.env.JWT_SECRET, { expiresIn: '7d' });
     }
 }

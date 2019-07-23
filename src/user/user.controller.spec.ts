@@ -8,9 +8,9 @@ describe('User Controller', () => {
   let service: UserService;
 
   const mockUser: UserDTO = {
-    'username': 'test_user',
-    'password': 'test_password',
-  }
+    username: 'test_user',
+    password: 'test_password',
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -23,8 +23,8 @@ describe('User Controller', () => {
             register: jest.fn(() => true),
             login: jest.fn(() => true),
           }),
-        }
-      ]
+        },
+      ],
     }).compile();
 
     controller = module.get<UserController>(UserController);

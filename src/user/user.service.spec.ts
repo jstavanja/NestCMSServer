@@ -13,9 +13,9 @@ describe('UserService', () => {
 
   beforeEach(async () => {
     mockUser = {
-      'username': 'test_user',
-      'password': 'test_password'
-    }
+      username: 'test_user',
+      password: 'test_password',
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [UserService,
@@ -30,7 +30,7 @@ describe('UserService', () => {
     }).compile();
 
     service = module.get<UserService>(UserService);
-    repository = module.get<Repository<User>>(getRepositoryToken(User))
+    repository = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
   it('should be defined', () => {
@@ -38,7 +38,7 @@ describe('UserService', () => {
   });
 
   it('should return all users without sensitive info', async () => {
-    mockUser.toResponseObject = jest.fn(() => ({ 'username': 'test_user', 'token': 'sometoken' }));
+    mockUser.toResponseObject = jest.fn(() => ({ username: 'test_user', token: 'sometoken' }));
     const users = await service.showAll();
     expect(repository.find).toHaveBeenCalledWith();
     expect(mockUser.toResponseObject).toHaveBeenCalled();
@@ -47,14 +47,14 @@ describe('UserService', () => {
 
   it('should login a user with correct password', async () => {
     // fake a successful authentication when comparePassword is called
-    mockUser.comparePassword = jest.fn(() => true)
+    mockUser.comparePassword = jest.fn(() => true);
     // mock an actual found user
     repository.findOne = jest.fn().mockResolvedValue(mockUser);
 
     const mockUsername = mockUser.username;
-    const loggedInMockUserRO = { 'username': mockUsername, 'token': 'sometoken' };
+    const loggedInMockUserRO = { username: mockUsername, token: 'sometoken' };
     mockUser.toResponseObject = jest.fn(() => loggedInMockUserRO);
-    
+
     const loggedInUser = await service.login(mockUser);
     expect(repository.findOne).toBeCalledWith({ where: { username: mockUsername } });
     expect(loggedInUser).toEqual(loggedInMockUserRO);
@@ -63,24 +63,23 @@ describe('UserService', () => {
 
   it('should not login a user with an incorrect password', async () => {
     // fake a successful authentication when comparePassword is called
-    mockUser.comparePassword = jest.fn(() => false)
+    mockUser.comparePassword = jest.fn(() => false);
     // mock an actual found user
     repository.findOne = jest.fn().mockResolvedValue(mockUser);
 
-    
     await expect(service.login(mockUser))
-      .rejects  
+      .rejects
       .toThrow(UnauthorizedException);
-      
+
     const mockUsername = mockUser.username;
     expect(repository.findOne).toBeCalledWith({ where: { username: mockUsername } });
   });
-  
+
   it('should not login a non-existent user', async () => {
     repository.findOne = jest.fn().mockResolvedValue(undefined);
 
     await expect(service.login(mockUser))
-      .rejects  
+      .rejects
       .toThrow(UnauthorizedException);
 
     const mockUsername = mockUser.username;
@@ -90,21 +89,21 @@ describe('UserService', () => {
   it('should register a not yet existing user', async () => {
     const date = new Date();
     const mockUserAfterCreate: any = {
-      'id': 'someid',
-      'username': 'test_user',
-      'password': 'somehash',
-      'created': date,
+      id: 'someid',
+      username: 'test_user',
+      password: 'somehash',
+      created: date,
       toResponseObject: null,
       hashPassword: null,
       comparePassword: null,
-      token: 'sometoken'
-    }
+      token: 'sometoken',
+    };
 
     repository.create = jest.fn(() => mockUserAfterCreate);
     repository.findOne = jest.fn().mockResolvedValue(undefined);
 
     const mockUsername = mockUser.username;
-    const loggedInMockUserRO = { 'username': mockUsername, 'token': 'sometokenaftercreate' };
+    const loggedInMockUserRO = { username: mockUsername, token: 'sometokenaftercreate' };
     mockUserAfterCreate.toResponseObject = jest.fn(() => loggedInMockUserRO);
 
     const registeredUser = await service.register(mockUser);
@@ -121,10 +120,10 @@ describe('UserService', () => {
     repository.findOne = jest.fn().mockResolvedValue(mockUser);
 
     await expect(service.register(mockUser))
-      .rejects  
+      .rejects
       .toThrow(BadRequestException);
 
     const mockUsername = mockUser.username;
     expect(repository.findOne).toHaveBeenCalledWith({ where: { username: mockUsername } });
-  })
+  });
 });

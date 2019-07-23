@@ -28,7 +28,7 @@ export class UserService {
 
     async register(createUserDTO: UserDTO): Promise<UserRO> {
         const { username } = createUserDTO;
-        
+
         let user = await this.userRepository.findOne({ where: { username }});
         if (user) {
             throw new BadRequestException('User already exists.');
