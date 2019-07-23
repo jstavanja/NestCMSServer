@@ -19,8 +19,7 @@ export class PagesService {
     }
 
     async create(createPageDto: CreatePageDto): Promise<Page> {
-        const page = this.pageRepository.create(createPageDto);
-        return await this.pageRepository.save(page);
+        return await this.pageRepository.save(Object.assign(new Page(), createPageDto));
     }
 
     async delete(id: string): Promise<DeleteResult> {
