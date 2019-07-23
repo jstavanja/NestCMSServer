@@ -20,8 +20,8 @@ export class ValidationPipe implements PipeTransform<any> {
     return value;
   }
 
-  private toValidate(metatype: Function): boolean {
-    const types: Function[] = [String, Boolean, Number, Array, Object];
+  private toValidate(metatype): boolean {
+    const types = [String, Boolean, Number, Array, Object];
     return !types.includes(metatype);
   }
 
@@ -29,7 +29,9 @@ export class ValidationPipe implements PipeTransform<any> {
     return errors
     .map(err => {
       for (const property in err.constraints) {
-        return err.constraints[property];
+        if (err.constraints.hasOwnProperty(property)) {
+          return err.constraints[property];
+        }
       }
     }).join(', ');
   }

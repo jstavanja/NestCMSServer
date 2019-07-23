@@ -25,9 +25,9 @@ export class AuthGuard implements CanActivate {
     if (process.env.NODE_ENV === 'test' && token === 'authenticated') {
         // ugly hack for authentication testing (unfortunately, NestJS is not the best for e2e tests)
         return {
-            'id': '7sd65as2-8ds9-1j2k-rand-0m1z3d4l0t',
-            'created': '2011-02-22T12:22:17.000Z',
-            'username': 'test'
+            id: '7sd65as2-8ds9-1j2k-rand-0m1z3d4l0t',
+            created: '2011-02-22T12:22:17.000Z',
+            username: 'test',
         };
     }
 
