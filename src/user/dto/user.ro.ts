@@ -5,6 +5,6 @@
 export class UserRO {
     id: string;
     username: string;
-    created: Date;
+    created?: Date;
     token?: string;
 }

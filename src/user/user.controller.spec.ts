@@ -35,6 +35,12 @@ describe('User Controller', () => {
     expect(controller).toBeDefined();
   });
 
+  it('should get current user without his password', async () => {
+    const mockAuthenticatedUser = { id: '1', username: 'user' };
+    const user = await controller.showCurrentUser({ user: mockAuthenticatedUser });
+    expect(user).not.toHaveProperty('password');
+  });
+
   it('should get users', async () => {
     await controller.showAllUsers();
     expect(service.showAll).toHaveBeenCalled();
