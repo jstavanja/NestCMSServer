@@ -7,7 +7,7 @@ export class ValidationPipe implements PipeTransform<any> {
   async transform(value: any, metadata: ArgumentMetadata) {
     if (value instanceof Object && this.isEmpty(value)) {
       throw new UnprocessableEntityException({
-        'message': 'No body submitted.',
+        message: 'No body submitted.',
       });
     }
     const { metatype } = metadata;
@@ -18,8 +18,8 @@ export class ValidationPipe implements PipeTransform<any> {
     const errors = await validate(object);
     if (errors.length > 0) {
       throw new UnprocessableEntityException({
-        'message': 'Validation failed.',
-        errors
+        message: 'Validation failed.',
+        errors,
       });
     }
     return value;
