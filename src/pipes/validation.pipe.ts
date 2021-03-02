@@ -1,4 +1,4 @@
-import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException } from '@nestjs/common';
+import { PipeTransform, Injectable, ArgumentMetadata, UnprocessableEntityException } from '@nestjs/common';
 import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
 
@@ -6,7 +6,9 @@ import { plainToClass } from 'class-transformer';
 export class ValidationPipe implements PipeTransform<any> {
   async transform(value: any, metadata: ArgumentMetadata) {
     if (value instanceof Object && this.isEmpty(value)) {
-      throw new BadRequestException('Validation failed: No body submitted');
+      throw new UnprocessableEntityException({
+        'message': 'No body submitted.',
+      });
     }
     const { metatype } = metadata;
     if (!metatype || !this.toValidate(metatype)) {
@@ -15,7 +17,10 @@ export class ValidationPipe implements PipeTransform<any> {
     const object = plainToClass(metatype, value);
     const errors = await validate(object);
     if (errors.length > 0) {
-      throw new BadRequestException(`Validation failed: ${this.formatErrors(errors)}`);
+      throw new UnprocessableEntityException({
+        'message': 'Validation failed.',
+        errors
+      });
     }
     return value;
   }
@@ -23,17 +28,6 @@ export class ValidationPipe implements PipeTransform<any> {
   private toValidate(metatype): boolean {
     const types = [String, Boolean, Number, Array, Object];
     return !types.includes(metatype);
-  }
-
-  private formatErrors(errors: any[]) {
-    return errors
-    .map(err => {
-      for (const property in err.constraints) {
-        if (err.constraints.hasOwnProperty(property)) {
-          return err.constraints[property];
-        }
-      }
-    }).join(', ');
   }
 
   private isEmpty(value: any) {
